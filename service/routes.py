@@ -64,11 +64,21 @@ def create_accounts():
 # ... place you code here to LIST accounts ...
 
 
-######################################################################
-# READ AN ACCOUNT
-######################################################################
+    ######################################################################
+    # READ AN ACCOUNT
+    ######################################################################
+@app.route("/accounts/<int:account_id>", methods=["GET"])
+def get_account(account_id):
+    """Reads a single Account"""
+    app.logger.info("Request to read an Account with id: %s", account_id)
 
-# ... place you code here to READ an account ...
+    account = Account.find(account_id)
+    if account is None:
+        abort(status.HTTP_404_NOT_FOUND,
+              f"Account with id [{account_id}] could not be found.")
+
+    return account.serialize(), status.HTTP_200_OK
+
 
 
 ######################################################################
@@ -100,3 +110,8 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {media_type}",
     )
+def test_get_account_not_found(self):
+    """It should not Read an Account that is not found"""
+    resp = self.client.get(f"{BASE_URL}/0")
+    self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
