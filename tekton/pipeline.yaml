@@ -40,5 +40,7 @@ spec:
       taskRef:
         name: flake8
       params:
-        - name: args
-          value: "--max-line-length=120"
+        - name: path
+          value: "."
+        - name: requirements_file
+          value: ""
